@@ -1,0 +1,30 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Adjust if your branch is different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install http-server
+        run: npm install http-server -g
+
+      - name: Deploy to GitHub Pages
+        run: |
+          mkdir -p .well-known
+          cp path/to/your/.well-known/com.apple.remotemanagement .well-known/com.apple.remotemanagement
+          http-server -p 8080 -c-1 -a localhost &
+          npx wait-on http://localhost:8080/.well-known/com.apple.remotemanagement
+          curl -H "Content-Type: application/json" -X PUT --data-binary @.well-known/com.apple.remotemanagement https://bcgspoon.com/.well-known/com.apple.remotemanagement
